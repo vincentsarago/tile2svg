@@ -1,0 +1,509 @@
+html, body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.result-block {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    font-size: 20px;
+    text-align: center;
+    z-index: 1000;
+    background-color: #FFF;
+}
+
+.result-block.in {
+    display: inherit;
+}
+
+
+#svgmap {
+    width: 100%;
+    height: 100%;
+}
+
+.result-block .right-top-button {
+    position: absolute;
+    top: 0;
+    right: -40px;
+    width: 40px;
+    height: auto;
+    color: #FFF;
+    background-color: #2a2929;
+    z-index: 10000;
+}
+
+.result-block .right-top-button div,
+.result-block .right-top-button a {
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    height: 50px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.result-block .right-top-button div i,
+.result-block .right-top-button a i {
+    vertical-align: middle;
+}
+
+.spin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.display-none {
+    display: none;
+}
+
+
+.no-webgl-message {
+  display: none;
+}
+
+html.no-webgl .no-webgl-message{
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1001; /* Ensures visibility in IE8 */
+  padding: 10px;
+  font-family: sans-serif;
+  background-color: lightyellow;
+  border-bottom: 1px solid gold;
+}
+
+#response {
+  overflow: hidden;
+  background-color: rgba(255,255,255,0.90);
+  font-family: sans-serif;
+  line-height: 1.4;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-top: 0;
+  z-index: 800;
+  background: #eaeef3; /* copy from hljs */
+  font-size: 12px;
+  display: none; /* when shown, use display: flex */
+
+  flex-flow: column nowrap;
+}
+
+#response-toggle-button {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  background-color: #054b92; /* Randomly chosen color */
+  box-shadow: 0 2px 0 #07315a;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: none;
+}
+#response-toggle-button:hover {
+  background-color: #085baf;
+}
+
+h1 {
+  margin: 0;
+  border-bottom: 1px solid #ddd;
+  padding: 6px 10px;
+}
+
+pre {
+  margin: 0;
+  background-color: #eaeef3;
+  flex: 1;
+  overflow: auto;
+}
+
+.hljs {
+  display: inline-block !important; /* allows horiz scrolling by parent */
+  overflow-x: hidden !important; /* override highlight.js stylesheet */
+  background: none !important; /* remove mysterious whitespace at bottom that sometimes appears */
+}
+
+#log {
+  box-sizing: border-box;
+  font-family: 'Source Code Pro', monospace;
+}
+
+#extra {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  pointer-events: all;
+  bottom: 20px;
+  z-index: 1000; /* Display on top of map */
+}
+
+#hints {
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-top: 0;
+  padding: 15px 10px;
+  font-family: 'Open Sans';
+  font-style: italic;
+}
+
+/* Starting condition shows the example query. */
+#hints .hint-type-this-in {
+  display: block;
+}
+#hints .hint-press-enter {
+  display: none;
+}
+
+/* When the conditional class is added to #hints, the hint changes. */
+#hints.hints-show-press-enter .hint-type-this-in {
+  display: none;
+}
+#hints.hints-show-press-enter .hint-press-enter {
+  display: block;
+}
+
+#hint-example {
+  color: #666;
+  border-bottom: 1px dotted #888;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.key {
+  background-color: #fff;
+  border-radius: 2px;
+  padding: .4em .5em;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+  color: #444;
+  margin: 0 0.2em;
+  box-shadow: inset 0 -3px 0 0 #bababa, 0 0 5px 0 rgba(0,0,0,0.20);
+}
+
+#query {
+  background: #f9f9E1;;
+  padding: 10px;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 400;
+  word-wrap: break-word;
+  display: none;
+}
+
+.query-text {
+  word-wrap: break-word;
+  white-space: normal;
+}
+.query-type, .query-text {
+  font-weight: 700;
+  color: darkred;
+}
+
+#display {
+  display: flex;
+  height: 100%;
+}
+#display > div {
+  flex-grow: 1;
+  width: 50%;
+  background-color: white;
+}
+
+/* Leaflet overrides for demo styling */
+.leaflet-top {
+  top: 80px;
+}
+
+@media only screen and (max-width: 768px) {
+  .leaflet-top {
+    top: 50px;
+  }
+}
+
+/* to allow UI to be full width */
+@media only screen and (max-width: 480px) {
+  .leaflet-top {
+    width: 100%;
+  }
+}
+
+.leaflet-touch .leaflet-bar,
+.leaflet-bar {
+  box-shadow: none;
+  border-radius: 0;
+  border: 1px solid #ccc;
+}
+
+.leaflet-bar a:first-child{
+  border-radius: 0px;
+}
+
+.leaflet-bar a:last-child{
+  border-radius: 0px;
+}
+
+/* Geocoder */
+.leaflet-pelias-control {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+  height: 70px;
+}
+
+/* .leaflet-touch is required to target Microsoft Edge, which always
+  has this class applied. This overrides assumptions made in the
+  geocoder plugin. */
+.leaflet-pelias-expanded,
+.leaflet-touch .leaflet-pelias-control.leaflet-pelias-expanded {
+  width: 480px;
+}
+
+/* Width overrides assumptions made in the original geocoder plugin. */
+@media only screen and (max-device-width: 320px) {
+  .leaflet-safari .leaflet-pelias-control.leaflet-pelias-expanded {
+    width: 320px;
+  }
+}
+
+/* Prevent iOS from zooming in on inputs */
+.leaflet-touch.leaflet-safari input {
+  font-size: 16px;
+}
+
+@media only screen and (max-width: 480px) {
+  .leaflet-pelias-expanded,
+  .leaflet-touch:not(.leaflet-safari) .leaflet-pelias-control.leaflet-pelias-expanded {
+    /* .leaflet-touch:not(.leaflet-safari) targets Microsoft Edge, not Mobile Safari */
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 525px) {
+  .leaflet-control-zoom {
+    display: none;
+  }
+}
+
+.leaflet-pelias-expanded .leaflet-pelias-close,
+.leaflet-pelias-control a.leaflet-pelias-search-icon {
+  background-color: transparent;
+}
+
+.leaflet-touch .leaflet-pelias-control.leaflet-pelias-expanded {
+  line-height: inherit;
+}
+
+/* repositioned results object */
+.leaflet-pelias-results {
+  position: relative;
+  border-top: 0;
+  border-right: 0;
+  box-sizing: border-box;
+  max-height: none !important; /* A max-height is imposed by the geocoder and makes no sense in our layout */
+}
+
+.leaflet-top .leaflet-pelias-results {
+  top: 71px; /* overrides top: 50px */
+}
+
+.leaflet-pelias-input {
+  border-radius: 0;
+}
+
+@media (max-width: 700px) {
+  .leaflet-left .leaflet-control {
+    margin-left: 0;
+  }
+}
+
+/* Try making results take up more than one line */
+.leaflet-pelias-results .leaflet-pelias-result {
+  white-space: normal;
+  position: relative;
+  padding-left: 24px;
+}
+
+span.leaflet-pelias-layer-icon-container {
+  position: absolute;
+  left: 6px;
+  top: 9px;
+}
+
+/*  HERO · SIZING
+    Use flexbox for more predictable center-positioning in hero mode
+    Browsers that do not have @supports will fall back to fixed positioning */
+
+/* Also include overrides for .leaflet-touch */
+/* .leaflet-touch:not(.leaflet-safari) targets Microsoft Edge, not Mobile Safari */
+.hero .leaflet-pelias-expanded,
+.hero .leaflet-touch:not(.leaflet-safari) .leaflet-pelias-control.leaflet-pelias-expanded {
+  max-width: 700px;
+  width: 100%;
+  height: 70px;
+}
+
+/*  HERO · POSITIONING
+    Use flexbox for more predictable center-positioning in hero mode
+    Browsers that do not have @supports will fall back to fixed positioning */
+
+/* NO FLEXBOX */
+.hero .leaflet-left .leaflet-control.leaflet-pelias-control {
+  margin-left: -350px;
+}
+
+.hero .leaflet-pelias-control {
+  position: fixed;
+  left: 50%;
+  top: 250px;
+}
+
+@media only screen and (max-width: 768px) {
+  .hero .leaflet-pelias-control {
+    top: 100px;
+  }
+}
+
+@supports (display: flex) {
+  .hero .leaflet-left.leaflet-top {
+    width: 100%;
+    height: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  /* CANCEL OUT FALLBACK RULES */
+  .hero .leaflet-left .leaflet-control.leaflet-pelias-control {
+    margin-left: 0;
+  }
+
+  .hero .leaflet-pelias-control {
+    position: relative;
+    left: auto;
+    top: auto;
+  }
+}
+
+/*  HERO · INPUT
+    The input is larger and has a red-border focus style */
+
+.hero .leaflet-left .leaflet-control {
+  margin-left: 0;
+}
+
+.hero .leaflet-pelias-control .leaflet-pelias-input {
+  padding-left: 40px;
+}
+
+.hero .leaflet-pelias-control .leaflet-pelias-input:focus {
+  outline: 1px solid #6ea0a4;
+  box-shadow: inset 0 0 0 2px #6ea0a4, inset 0 0 8px #6ea0a4;
+}
+
+.hero .leaflet-pelias-control a.leaflet-pelias-search-icon {
+  width: 46px;
+}
+
+/*  MAP · POINT MARKER
+    Custom dot with pulsating radius */
+
+.point-marker {
+  border-radius: 50%;
+  background-color: rgba(55, 93, 92, 0.90);
+}
+
+.point-marker::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  height: 24px;
+  width: 24px;
+  border: 3px solid rgba(55, 93, 92, 0.6);
+  border-radius: 50%;
+  animation: pulsate 1.5s ease-out;
+  animation-iteration-count: infinite;
+  opacity: 0;
+}
+
+/* guide instruction for autocomplete/search mode*/
+.mode.leaflet-pelias-control::before {
+  color: #aaa;
+  font-style: italic;
+  position: absolute;
+  left: 30px;
+  top: 43px;
+  padding: 3px;
+}
+
+.hero .mode.leaflet-pelias-control::before{
+  left: 45px;
+}
+
+.auto-complete.mode.leaflet-pelias-control::before {
+  content: 'Autocomplete mode. Press Enter ⏎ to search!';
+}
+.search.mode.leaflet-pelias-control::before {
+  content: 'Search mode. Start typing to autocomplete!';
+}
+
+/* lift up search input little bit to give space to guide*/
+.mode .leaflet-pelias-input {
+  padding-top: 0;
+}
+
+
+@keyframes pulsate {
+  0% { transform: scale(0.1, 0.1); opacity: 0; }
+  50% { opacity: 1;}
+  100% { transform: scale(1.2, 1.2); opacity: 0; }
+}
+
+/* Prevent safari from automatically adjusting text sizes */
+@media screen and (max-device-width: 480px) {
+  body {
+    -webkit-text-size-adjust: none;
+  }
+}
