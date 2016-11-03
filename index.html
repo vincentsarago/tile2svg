@@ -154,7 +154,7 @@
 
 				var tilePath = d3.geo.path();
 
-				d3.json(url, function(err, json) {
+				d3.json("https://u4h2tjydjl.execute-api.us-west-2.amazonaws.com/remotepixel/https?url=" + url, function(err, json) {
 	                var b = path.bounds(json),
 	                s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
 	                t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
